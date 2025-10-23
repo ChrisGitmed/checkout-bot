@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/ChrisGitmed/shopping-bot#readme",
   "dependencies": {
-    "puppeteer": "^24.26.0"
+    "eslint": "9.38.0",
+    "puppeteer": "24.26.0"
   }
 }
