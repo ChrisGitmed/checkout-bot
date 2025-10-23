@@ -1,0 +1,24 @@
+{
+  "name": "shopping-bot",
+  "version": "1.0.0",
+  "description": "A bot created to query specified stores and see if specified items are in stock, then purchase the items if they're available.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChrisGitmed/shopping-bot.git"
+  },
+  "keywords": [],
+  "author": "Christopher Gitmed",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/ChrisGitmed/shopping-bot/issues"
+  },
+  "homepage": "https://github.com/ChrisGitmed/shopping-bot#readme",
+  "dependencies": {
+    "puppeteer": "^24.26.0"
+  }
+}
