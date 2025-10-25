@@ -10,9 +10,6 @@ import puppeteer from 'puppeteer';
  * any necessary forms along the way. Finally, a notification should be send to the User that the
  * item(s) were checkout out.
  *
- * ! This is currently throwing the following error:
- * !   Error: net::ERR_CERT_AUTHORITY_INVALID at https://www.walmart.com/search?q=Pokemon+Trading+Cards
- *
  * TODO: Once the above error is fixed, the script should be updated to go directly to the desired product URL
  * TODO: (Not MVP): Send SMS/RCS notification
  * TODO: (Not MVP): Can I update this to visit multiple URLs in parallel?
@@ -39,6 +36,7 @@ import puppeteer from 'puppeteer';
     const targetUrl = 'https://www.walmart.com/search?q=Pokemon+Trading+Cards';
     await page.goto(targetUrl, {
       waitUntil: 'load',
+      timeout: '180000', // Three minutes
     });
 
     // TODO: Click 'Add To Cart'
