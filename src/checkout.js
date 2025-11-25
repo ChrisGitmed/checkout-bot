@@ -3,14 +3,6 @@ import { exit } from 'node:process';
 import { log } from 'node:console';
 import puppeteer from 'puppeteer';
 
-// Simple logging/debugging function to log 'Clicked' on button click
-const clickButton = async (page, selector) => {
-  await page.$eval(selector, (button) => {
-    button.click();
-  });
-  console.log('Clicked');
-};
-
 // Tell the node process to sleep for `x` milliseconds
 const sleep  = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
