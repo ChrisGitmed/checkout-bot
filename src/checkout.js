@@ -3,14 +3,6 @@ import { exit } from 'node:process';
 import { log } from 'node:console';
 import puppeteer from 'puppeteer';
 
-// Simple logging/debugging function to log 'Clicked' on button click
-const clickButton = async (page, selector) => {
-  await page.$eval(selector, (button) => {
-    button.click();
-  });
-  console.log('Clicked');
-};
-
 // Tell the node process to sleep for `x` milliseconds
 const sleep  = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -27,6 +19,9 @@ const browser = await puppeteer.launch({
     `--proxy-server=http://${config.PROXY_SERVER}:${config.PROXY_SERVER_PORT}`,
   ],
 });
+
+// If the process is killed, close the browser
+process.on('SIGTERM', () => browser.close());
 
 /**
  * This script should use the puppeteer package to open a new browser window.
@@ -46,35 +41,40 @@ const browser = await puppeteer.launch({
       password: config.PROXY_PASSWORD,
     });
 
+    // Block any fonts, images, or stylesheets from being loaded to reduce load times
+    await page.setRequestInterception(true);
+    page.on('request', (req) => {
+      if (
+        req.resourceType() === 'image' || // Block images
+        req.resourceType() === 'stylesheet' || // Block CSS
+        req.resourceType() === 'font' // Block fonts (CSS)
+      ) {
+        req.abort();
+      } else {
+        req.continue();
+      }
+    });
+    // await page.setJavaScriptEnabled(false);
+
     // Go to the product URL
     await page.goto(targetUrls[0], {
-      timeout: '180000',
+      timeout: '30000',
       waitUntil: 'domcontentloaded',
     });
-    log('Page loaded');
-    sleep(2000);
+    log('Product page loaded');
+    await sleep(2000);
 
     // Click 'Add To Cart'
-    await Promise.all([
-      page.waitForNavigation({
-        timeout: '180000',
-        waitUntil: 'domcontentloaded',
-      }),
-      clickButton(page, '#add-to-cart-button'),
-    ]);
-    log('Added item to cart');
-    sleep(3000);
+    log('Clicking \'Add to Cart\'...');
+    page.locator('#add-to-cart-button').click(),
+    log('Clicked \'Add to Cart\'');
+    await sleep(3000);
 
     // Click 'Proceed to checkout'
-    await Promise.all([
-      page.waitForNavigation({
-        timeout: '180000',
-        waitUntil: 'domcontentloaded',
-      }),
-      clickButton(page, 'input[name="proceedToRetailCheckout"]'),
-    ]);
-    log('Proceeded to checkout');
-    sleep(3000);
+    log('Clicking \'Proceed to checkout\'...');
+    page.locator('input[name="proceedToRetailCheckout"]').click(),
+    log('Clicked \'Proceed to checkout\'');
+    await sleep(3000);
 
     // TODO: Enter any need checkout details
 
