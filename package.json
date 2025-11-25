@@ -4,7 +4,7 @@
   "description": "A bot created to query specified stores and see if specified items are in stock, then purchase the items if they're available.",
   "main": "index.js",
   "scripts": {
-    "test": "node --env-file=.env app/checkout.js"
+    "test": "node --env-file=.env src/checkout.js"
   },
   "repository": {
     "type": "git",
